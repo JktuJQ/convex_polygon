@@ -36,8 +36,10 @@ try:
     while True:
         f = f.add(R2Point())
         tk.clean()
+        tk.draw_circle()
         f.draw(tk)
-        print(f"S = {f.area()}, P = {f.perimeter()}\n")
+        print(f"S = {f.area()}, P = {f.perimeter()}, "
+              f"set_power = {f.set_power()}")
 except (EOFError, KeyboardInterrupt):
     print("\nStop")
     tk.close()

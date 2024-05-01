@@ -30,6 +30,9 @@ class TestVoid:
     def test_add(self):
         assert isinstance(self.f.add(R2Point(0.0, 0.0)), Point)
 
+    def test_set_power(self):
+        assert self.f.set_power() == 0
+
 
 class TestPoint:
 
@@ -52,6 +55,13 @@ class TestPoint:
     # Площадь одноугольника нулевая
     def test_area(self):
         assert self.f.area() == 0.0
+
+    def test_set_power1(self):
+        assert self.f.set_power() == 1
+
+    def test_set_power2(self):
+        self.f = Point(R2Point(2.0, 0.0))
+        assert not self.f.set_power()
 
     # При добавлении точки одноугольник может не измениться
     def test_add1(self):
@@ -84,9 +94,31 @@ class TestSegment:
     def test_area(self):
         assert self.f.area() == 0.0
 
-    # При добавлении точки двуугольник может не измениться
-    def test_add1(self):
-        assert self.f.add(R2Point(0.5, 0.0)) is self.f
+    def test_set_power1(self):
+        assert self.f.set_power() == "continuum"
+        assert self.f.set_power_without_last_point() == "continuum"
+
+    def test_set_power2(self):
+        self.f = Segment(R2Point(1.0, 0.0), R2Point(1.0, 1.0))
+        assert self.f.set_power() == 1
+
+    def test_set_power3(self):
+        self.f = Segment(R2Point(1.0, 1.0), R2Point(1.0, 0.0))
+        assert not self.f.set_power_without_last_point()
+
+    def test_set_power4(self):
+        self.f = Segment(R2Point(2.0, 0.0), R2Point(2.0, 2.0))
+        assert not self.f.set_power()
+        self.f = Segment(R2Point(0.0, 2.0), R2Point(0.0, 4.0))
+        assert not self.f.set_power()
+        self.f = Segment(R2Point(0.0, 1.0), R2Point(0.0, 2.0))
+        assert self.f.set_power() == 1
+
+    def test_set_power5(self):
+        self.f = Segment(R2Point(-5.0, 2.5), R2Point(9.0, -8.0))
+        assert self.f.set_power() == 1
+        self.f = Segment(R2Point(-7.0, 4), R2Point(-5.0, 2.5))
+        assert not self.f.set_power()
 
     # Он не изменяется в том случае, когда добавляемая точка совпадает
     # с одним из концов отрезка
@@ -152,12 +184,12 @@ class TestPolygon:
             R2Point(
                 1.0,
                 0.4)).add(
-                    R2Point(
-                        0.8,
-                        0.9)).add(
-                            R2Point(
-                                0.9,
-                                0.8)).points.size() == 7
+            R2Point(
+                0.8,
+                0.9)).add(
+            R2Point(
+                0.9,
+                0.8)).points.size() == 7
         assert self.f.add(R2Point(2.0, 2.0)).points.size() == 4
 
     # Изменение периметра многоугольника
@@ -177,3 +209,43 @@ class TestPolygon:
     #   добавление точки может увеличить площадь
     def test_area2(self):
         assert self.f.add(R2Point(1.0, 1.0)).area() == approx(1.0)
+
+    def test_set_power1(self):
+        assert self.f.set_power() == "continuum"
+
+    def test_set_power2(self):
+        assert self.f.add(R2Point(1.0, 1.0)) \
+                   .set_power() == "continuum"
+
+    def test_set_power3(self):
+        self.f = Polygon(R2Point(-2.0, 0.0),
+                         R2Point(0.0, 2.0),
+                         R2Point(0.0, -2.0))
+        assert self.f.set_power() == "continuum"
+
+    def test_set_power4(self):
+        self.f = Polygon(R2Point(1.0, 0.0),
+                         R2Point(1.0, 1.0),
+                         R2Point(2.0, 2.0))
+        assert self.f.set_power() == 1
+
+    def test_set_power5(self):
+        self.f = Polygon(R2Point(1.0, 0.0),
+                         R2Point(1.0, 1.0),
+                         R2Point(2.0, 2.0))
+        assert self.f.set_power() == 1
+        self.f.add(R2Point(0.0, 0.0))
+        assert self.f.set_power() == "continuum"
+
+    def test_set_power6(self):
+        self.f = Polygon(R2Point(1.0, 1.0),
+                         R2Point(1.0, -1.0),
+                         R2Point(-1.0, -1.0))
+        assert self.f.set_power() == "continuum"
+        self.f.add(R2Point(-1.0, 1.0))
+        assert self.f.set_power() == 4
+        self.f.add(R2Point(2.0, 2.0))
+        self.f.add(R2Point(2.0, -2.0))
+        self.f.add(R2Point(-2.0, -2.0))
+        self.f.add(R2Point(-2.0, 2.0))
+        assert not self.f.set_power()

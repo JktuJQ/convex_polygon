@@ -1,10 +1,3 @@
----
-date: 9 ноября 2023 года
-author: Е.А. Роганов
-title: Проект «Выпуклая оболочка»
-main_version: 2
----
-
 ### Постановка задачи
 
 Необходимо написать программу, находящую выпуклую оболочку последовательно
@@ -81,7 +74,6 @@ main_version: 2
 [roganov@aorus convex]$ python -B -m pytest -p no:cacheprovider tests
 ============================= test session starts ==============================
 platform linux -- Python 3.12.0, pytest-7.4.3, pluggy-1.3.0
-rootdir: /home/roganov/convex
 plugins: mock-3.12.0
 collected 47 items                                                             
 
@@ -98,11 +90,8 @@ tests/test_r2point.py .................                                  [100%]
 её использовать:
 
 ~~~
-[roganov@aorus convex]$ export PYTHONDONTWRITEBYTECODE=yes
-[roganov@aorus convex]$ coverage run -m pytest -p no:cacheprovider tests && coverage report -m ; rm -f .coverage
 ============================= test session starts ==============================
 platform linux -- Python 3.12.0, pytest-7.4.3, pluggy-1.3.0
-rootdir: /home/roganov/convex
 plugins: mock-3.12.0
 collected 47 items                                                             
 
